@@ -6,15 +6,22 @@ import io.branch.referral.Branch
 import java.util.UUID
 
 class BranchLinkSimulatorApplication: Application() {
+    private lateinit var currentConfig: ApiConfiguration
+    lateinit var roundTripStore: RoundTripStore
+        private set
+
     override fun onCreate() {
         super.onCreate()
 
-        // Branch logging for debugging
-        Branch.enableLogging()
-        Branch.setAPIUrl("https://protected-api.branch.io/")
+        val preferences = getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE)
+        currentConfig = ApiConfigManager.loadConfigOrDefault(preferences)
 
+        Branch.setAPIUrl(currentConfig.apiUrl)
+
+        roundTripStore = RoundTripStore(this)
+        Branch.enableLogging(roundTripStore)
         // Branch object initialization
-        Branch.getAutoInstance(this)
+        Branch.getAutoInstance(this, currentConfig.branchKey)
 
         // Retrieve or create the bls_session_id
         val sharedPreferences = getSharedPreferences("branch_session_prefs", Context.MODE_PRIVATE)
@@ -26,6 +33,5 @@ class BranchLinkSimulatorApplication: Application() {
 
         // Set the bls_session_id in Branch request metadata
         Branch.getInstance().setRequestMetadata("bls_session_id", blsSessionId)
-
     }
 }
