@@ -117,7 +117,7 @@ fun ApiButton(
         },
         modifier = modifier.padding(0.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (isSelected) Color.Blue else Color.Gray,
+            containerColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Gray,
             contentColor = Color.White
         )
     ) {
