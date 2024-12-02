@@ -14,3 +14,9 @@
 .cxx
 local.properties
 *.aab
+.idea/
+app/src/main/res/drawable/
+.kotlin/errors/
+app/release
+app/src/main/ic_launcher-playstore.png
+app/src/main/res/
