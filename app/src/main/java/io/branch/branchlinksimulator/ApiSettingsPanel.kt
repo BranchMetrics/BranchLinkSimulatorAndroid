@@ -17,13 +17,14 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import kotlin.system.exitProcess
 
 const val SELECTED_CONFIG_NAME = "selectedConfigName"
 const val PREFERENCES_KEY = "ApiPreferences"
 
 @Composable
-fun ApiSettingsPanel() {
+fun ApiSettingsPanel(navController: NavController) {
     val context = LocalContext.current
     val preferences = remember { context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE) }
     var selectedConfig by remember { mutableStateOf(ApiConfigManager.loadConfigOrDefault(preferences)) }
@@ -57,6 +58,9 @@ fun ApiSettingsPanel() {
                     selectedConfig = it
                     saveConfig(preferences, it)
                 })
+            }
+            RoundedButton(title = "See Requests", icon = R.drawable.branch_badge_all_white) {
+                navController.navigate("request")
             }
         }
     }
@@ -153,7 +157,7 @@ fun ApiButton(
 }
 
 fun saveConfig(preferences: SharedPreferences, config: ApiConfiguration) {
-    val configName = apiConfigurationsMap.entries.firstOrNull { it.value == config }?.key ?: STAGING
+    val configName = apiConfigurationsMap.entries.firstOrNull { it.value == config }?.key ?: PRODUCTION
     preferences.edit().putString(SELECTED_CONFIG_NAME, configName).apply()
 }
 
