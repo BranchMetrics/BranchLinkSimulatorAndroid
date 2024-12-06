@@ -58,9 +58,14 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.runtime.State
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.UUID
+import kotlin.coroutines.resume
 
 var customerEventAlias = ""
 var sessionID = ""
@@ -71,8 +76,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         this.roundTripStore = (application as BranchLinkSimulatorApplication).roundTripStore
+
+        val initErrorMessageState = mutableStateOf<String?>(null)
 
         setContent {
             BranchLinkSimulatorTheme {
@@ -83,11 +89,14 @@ class MainActivity : ComponentActivity() {
                     navController = rememberNavController()
                     NavHost(navController = navController!!, startDestination = "main") {
                         composable("main") {
-                            MainContent(navController!!)
+                            MainContent(navController!!, initErrorMessageState)
                         }
 
                         composable("request") {
-                            RoundTripsNavHost(navController = rememberNavController(), roundTripStore = roundTripStore)
+                            RoundTripsNavHost(
+                                navController = rememberNavController(),
+                                roundTripStore = roundTripStore
+                            )
                         }
 
                         composable(
@@ -105,36 +114,47 @@ class MainActivity : ComponentActivity() {
                             val params = backStackEntry.arguments?.getString("params") ?: ""
                             DetailScreen(title, parseQueryParams(params))
                         }
-
                     }
                 }
             }
         }
+
+        lifecycleScope.launch {
+            val initErrorMessage = initializeBranch()
+            initErrorMessageState.value = initErrorMessage
+        }
     }
 
-    override fun onStart() {
-        super.onStart()
-
+    private suspend fun initializeBranch(): String? = suspendCancellableCoroutine { continuation ->
         Branch.sessionBuilder(this).withCallback { branchUniversalObject, linkProperties, error ->
             if (error != null) {
-                Log.e("BranchSDK_Tester", "branch init failed. Caused by -" + error.message)
-            } else {
-                Log.i("BranchSDK_Tester", "branch init complete!")
-                if (branchUniversalObject != null && linkProperties != null) {
-                    val title = branchUniversalObject.title ?: "Default Title"
-
-
-                    val lpQueryString =  convertLinkPropertiesToQueryString(linkProperties)
-                    val buoQueryString = convertBUOToQueryString(branchUniversalObject)
-
-                    val combinedQueryString = listOf(buoQueryString, lpQueryString)
-                        .filterNot { it.isEmpty() }
-                        .joinToString("&")
-
-                    Log.i("BranchSDK_Tester", "Navigating to details/$title/$combinedQueryString")
-                    navController?.navigate("details/$title/$combinedQueryString")
-                }
+                Log.e("BranchSDK_Tester", "Branch init failed. Caused by - ${error.message}")
+                if (error.message == null)
+                    continuation.resume("unknown error occurred")
+                var msg = error.message
+                if ((application as BranchLinkSimulatorApplication).currentConfig.staging)
+                    msg += " Are you connected to vpn?"
+                continuation.resume(msg)
+                return@withCallback
             }
+            Log.i("BranchSDK_Tester", "Branch init complete!")
+            if (branchUniversalObject == null || linkProperties == null) {
+                continuation.resume(null)
+                return@withCallback
+            }
+
+            val title = branchUniversalObject.title ?: "Default Title"
+
+            val lpQueryString = convertLinkPropertiesToQueryString(linkProperties)
+            val buoQueryString = convertBUOToQueryString(branchUniversalObject)
+
+            val combinedQueryString = listOf(buoQueryString, lpQueryString)
+                .filterNot { it.isEmpty() }
+                .joinToString("&")
+
+            Log.i("BranchSDK_Tester", "Navigating to details/$title/$combinedQueryString")
+            navController?.navigate("details/$title/$combinedQueryString")
+            continuation.resume(null)
         }.withData(this.intent.data).init()
     }
 
@@ -154,10 +174,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainContent(navController: NavController) {
+fun MainContent(navController: NavController, initErrorMessageState: State<String?>) {
     val context = LocalContext.current
     var showAliasDialog by remember { mutableStateOf(false) }
     var showSessionIdDialog by remember { mutableStateOf(false) }
+    var initErrorMessageDialogShown by remember { mutableStateOf(false) }
 
     val sharedPreferences = context.getSharedPreferences("branch_session_prefs", Context.MODE_PRIVATE)
     val blsSessionId = sharedPreferences.getString("bls_session_id", null) ?: UUID.randomUUID().toString().also {
@@ -171,6 +192,72 @@ fun MainContent(navController: NavController) {
     }
     customerEventAlias = savedAlias
     var aliasValue by remember { mutableStateOf(savedAlias) }
+
+    if (showAliasDialog) {
+        AlertDialog(
+            onDismissRequest = { showAliasDialog = false },
+            title = { Text("Enter Customer Event Alias") },
+            text = {
+                TextField(
+                    value = aliasValue,
+                    onValueChange = { aliasValue = it },
+                    label = { Text("Ex. mainAlias") },
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    sharedPreferences.edit().putString("customer_event_alias", aliasValue).apply()
+                    customerEventAlias = aliasValue
+                    Toast.makeText(context, "Set Customer Event Alias to $aliasValue", Toast.LENGTH_SHORT).show()
+                    showAliasDialog = false
+                }) {
+                    Text("Save")
+                }
+            }
+        )
+    }
+
+    if (showSessionIdDialog) {
+        AlertDialog(
+            onDismissRequest = { showSessionIdDialog = false },
+            title = { Text("Enter A Session ID") },
+            text = {
+                TextField(
+                    value = sessionIdValue,
+                    onValueChange = { sessionIdValue = it },
+                    label = { Text("Ex. testingSession02") },
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    Branch.getInstance().setRequestMetadata("bls_session_id", sessionIdValue)
+                    sharedPreferences.edit().putString("bls_session_id", sessionIdValue).apply()
+                    Toast.makeText(context, "Set App's Session ID to $sessionIdValue", Toast.LENGTH_SHORT).show()
+                    showSessionIdDialog = false
+                }) {
+                    Text("Save")
+                }
+            }
+        )
+    }
+
+    if (initErrorMessageState.value != null && !initErrorMessageDialogShown) {
+        AlertDialog(
+            onDismissRequest = { initErrorMessageDialogShown = true },
+            title = { Text("Error initializing Branch") },
+            text = {
+                Text(initErrorMessageState.value ?: "")
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    initErrorMessageDialogShown = true
+                }) {
+                    Text("Ok")
+                }
+            }
+        )
+    }
+
 
     LazyColumn(modifier = Modifier.padding(16.dp)) {
         item {
@@ -199,7 +286,7 @@ fun MainContent(navController: NavController) {
         }
 
         item { SectionHeader(title = "Api Settings")}
-        item { ApiSettingsPanel() }
+        item { ApiSettingsPanel(navController) }
 
         item { SectionHeader(title = "Event Settings") }
         item {
@@ -210,58 +297,6 @@ fun MainContent(navController: NavController) {
         item {
             RoundedButton(title = "Change App's Session ID", icon = R.drawable.branch_badge_all_white) {
                 showSessionIdDialog = true
-            }
-        }
-
-        if (showAliasDialog) {
-            item {
-                AlertDialog(
-                    onDismissRequest = { showAliasDialog = false },
-                    title = { Text("Enter Customer Event Alias") },
-                    text = {
-                        TextField(
-                            value = aliasValue,
-                            onValueChange = { aliasValue = it },
-                            label = { Text("Ex. mainAlias") },
-                        )
-                    },
-                    confirmButton = {
-                        TextButton(onClick = {
-                            sharedPreferences.edit().putString("customer_event_alias", aliasValue).apply()
-                            customerEventAlias = aliasValue
-                            Toast.makeText(context, "Set Customer Event Alias to $aliasValue", Toast.LENGTH_SHORT).show()
-                            showAliasDialog = false
-                        }) {
-                            Text("Save")
-                        }
-                    }
-                )
-            }
-        }
-
-        if (showSessionIdDialog) {
-            item {
-                AlertDialog(
-                    onDismissRequest = { showSessionIdDialog = false },
-                    title = { Text("Enter A Session ID") },
-                    text = {
-                        TextField(
-                            value = sessionIdValue,
-                            onValueChange = { sessionIdValue = it },
-                            label = { Text("Ex. testingSession02") },
-                        )
-                    },
-                    confirmButton = {
-                        TextButton(onClick = {
-                            Branch.getInstance().setRequestMetadata("bls_session_id", sessionIdValue)
-                            sharedPreferences.edit().putString("bls_session_id", sessionIdValue).apply()
-                            Toast.makeText(context, "Set App's Session ID to $sessionIdValue", Toast.LENGTH_SHORT).show()
-                            showSessionIdDialog = false
-                        }) {
-                            Text("Save")
-                        }
-                    }
-                )
             }
         }
     }
@@ -344,10 +379,6 @@ fun EventsColumn(navController: NavController, modifier: Modifier = Modifier, co
             icon = R.drawable.send_custom
         )
         { sendCustomEvent(context) }
-
-        RoundedButton(title = "See Requests", icon = R.drawable.branch_badge_all_white) {
-            navController.navigate("request")
-        }
     }
 }
 

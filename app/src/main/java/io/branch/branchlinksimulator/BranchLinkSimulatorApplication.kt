@@ -6,7 +6,7 @@ import io.branch.referral.Branch
 import java.util.UUID
 
 class BranchLinkSimulatorApplication: Application() {
-    private lateinit var currentConfig: ApiConfiguration
+    lateinit var currentConfig: ApiConfiguration
     lateinit var roundTripStore: RoundTripStore
         private set
 
