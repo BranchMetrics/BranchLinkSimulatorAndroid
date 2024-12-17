@@ -12,8 +12,8 @@ android {
         applicationId = "io.branch.branchlinksimulator"
         minSdk = 26
         targetSdk = 34
-        versionCode = 17
-        versionName = "1.7"
+        versionCode = 22
+        versionName = "2.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
