@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import io.branch.interfaces.IBranchLoggingCallbacks
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.serialization.json.*
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,6 +24,8 @@ class RoundTripStore(context: Context) : IBranchLoggingCallbacks {
     val roundTrips: StateFlow<List<RoundTrip>> = _roundTrips
 
     private val FAILED = "failed to parse"
+
+    private val json = Json { prettyPrint = true }
 
     override fun onBranchLog(logMessage: String?, severityConstantName: String?) {
         scope.launch(Dispatchers.Main) {
@@ -89,10 +91,15 @@ class RoundTripStore(context: Context) : IBranchLoggingCallbacks {
         return regex.find(log)?.value
     }
 
+    private fun String.prettyPrint(): String {
+        val jsonElement = json.parseToJsonElement(this)
+        return json.encodeToString(jsonElement)
+    }
+
     private fun parseBody(log: String, identifier: String): String? {
         val bodyStart = log.indexOf(identifier).takeIf { it != -1 }?.let { it + identifier.length }
         return bodyStart?.let {
-            log.substring(it).trim()
+            log.substring(it).trim().prettyPrint()
         }
     }
 
