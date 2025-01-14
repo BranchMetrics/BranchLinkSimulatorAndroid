@@ -99,16 +99,34 @@ fun RoundTripDetailView(roundTrip: RoundTrip) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        VariableView(label = "URL", value = roundTrip.url)
-        Spacer(modifier = Modifier.height(8.dp))
-        Text("Request", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-        VariableView(label = "Body", value = roundTrip.request?.body ?: "FAILED")
-        Spacer(modifier = Modifier.height(16.dp))
-        roundTrip.response?.let {
-            Text("Response", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-            Text("Status Code: ${it.statusCode}", style = MaterialTheme.typography.titleSmall, color = Color.White)
-            VariableView(label = "Body", value = it.body)
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            item {
+                VariableView(label = "URL", value = roundTrip.url)
+            }
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            item {
+                Text("Request", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+            }
+            item {
+                VariableView(label = "Body", value = roundTrip.request?.body ?: "FAILED")
+            }
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+            item {
+                roundTrip.response?.let {
+                    Text("Response", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+                    Text("Status Code: ${it.statusCode}", style = MaterialTheme.typography.titleSmall, color = Color.White)
+                    VariableView(label = "Body", value = it.body)
+                }
+            }
         }
+
     }
 }
 
