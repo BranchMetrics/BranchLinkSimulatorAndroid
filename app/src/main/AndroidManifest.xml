@@ -33,23 +33,80 @@
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
 
-            <!-- Branch App Links - Live App -->
+            <!-- Branch App Links -->
+
+            <!-- Live Prod App -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="allergics.org" />
-                <data android:scheme="https" android:host="branchlinksimulator.app.link" />
-                <data android:scheme="https" android:host="branchlinksimulator-alternate.app.link" />
+                <data android:scheme="https" android:host="prod-freedom.branchcustom.xyz" />
+                <data android:scheme="https" android:host="prod-freedom.app.link" />
+                <data android:scheme="https" android:host="prod-freedom-alternate.app.link" />
             </intent-filter>
 
-            <!-- Branch App Links - Test App -->
+            <!-- Test Prod App -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="branchlinksimulator.test-app.link" />
-                <data android:scheme="https" android:host="branchlinksimulator-alternate.test-app.link" />
+                <data android:scheme="https" android:host="prod-freedom.test-app.link" />
+                <data android:scheme="https" android:host="prod-freedom-alternate.test-app.link" />
+            </intent-filter>
+
+            <!-- Live Prod AC App -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="prod-ac-sandbox.app.link" />
+                <data android:scheme="https" android:host="prod-ac-sandbox-alternate.app.link" />
+            </intent-filter>
+
+            <!-- Test Prod AC App -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="prod-ac-sandbox.test-app.link" />
+                <data android:scheme="https" android:host="prod-ac-sandbox-alternate.test-app.link" />
+            </intent-filter>
+
+            <!-- Live Stage App -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="stage-freedom.branchcustom.xyz" />
+                <data android:scheme="https" android:host="stage-freedom.branchbeta.link" />
+                <data android:scheme="https" android:host="stage-freedom-alternate.branchbeta.link" />
+            </intent-filter>
+
+            <!-- Test Stage App -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="stage-freedom.test-branchbeta.link" />
+                <data android:scheme="https" android:host="stage-freedom-alternate.test-branchbeta.link" />
+            </intent-filter>
+
+            <!-- Live Stage AC App -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="stage-ac-sandbox.branchbeta.link" />
+                <data android:scheme="https" android:host="stage-ac-sandbox-alternate.branchbeta.link" />
+            </intent-filter>
+
+            <!-- Test Stage AC App -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="stage-ac-sandbox.test-branchbeta.link" />
+                <data android:scheme="https" android:host="stage-ac-sandbox-alternate.test-branchbeta.link" />
             </intent-filter>
         </activity>
         <!-- Branch init -->
