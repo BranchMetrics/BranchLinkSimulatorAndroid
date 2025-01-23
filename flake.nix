@@ -24,11 +24,6 @@
             jdk
           ];
           JAVA_HOME = "${jdk}";
-          shellHook = ''
-              if [ -f $HOME/.config/bin/setup-intellij-jdk ] && [ -f ./.idea/misc.xml ]; then
-                $HOME/.config/bin/setup-intellij-jdk || echo "setup-intellij-jdk failed"
-              fi
-          '';
         };
         formatter = pkgs.nixpkgs-fmt;
       }
