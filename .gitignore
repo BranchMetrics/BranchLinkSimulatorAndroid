@@ -20,3 +20,4 @@ app/src/main/res/drawable/
 app/release
 app/src/main/ic_launcher-playstore.png
 app/src/main/res/
+.direnv/
