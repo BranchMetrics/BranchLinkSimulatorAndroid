@@ -54,6 +54,16 @@
                 <data android:scheme="https" android:host="prod-freedom-alternate.test-app.link" />
             </intent-filter>
 
+            <!-- Live Prod Link Shortener App -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="hop.link" />
+                <data android:scheme="https" android:host="r3dfg.app.link" />
+                <data android:scheme="https" android:host="r3dfg-alternate.app.link" />
+            </intent-filter>
+
             <!-- Live Prod AC App -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -89,6 +99,16 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" android:host="stage-freedom.test-branchbeta.link" />
                 <data android:scheme="https" android:host="stage-freedom-alternate.test-branchbeta.link" />
+            </intent-filter>
+
+            <!-- Live Stage Link Shortener App -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="hoplink.branchcustom.xyz" />
+                <data android:scheme="https" android:host="skhsg.branchbeta.link" />
+                <data android:scheme="https" android:host="skhsg-alternate.branchbeta.link" />
             </intent-filter>
 
             <!-- Live Stage AC App -->

@@ -7,12 +7,20 @@ data class ApiConfiguration(
     val staging: Boolean
 )
 
-const val STAGING = "Staging"
-const val PRODUCTION = "Production"
-const val STAGING_AC = "Staging AC"
-const val PRODUCTION_AC = "Production AC"
+const val STAGING = "[Stage] External Services"
+const val PRODUCTION = "Pro Production"
+const val STAGING_AC = "[Stage] Adv. Compliance Sandbox"
+const val PRODUCTION_AC = "Adv. Compliance Sandbox"
+const val STAGING_LS = "[Stage] LS + ENGMT Ess. Demo"
+const val PRODUCTION_LS = "LS + ENGMT Ess. Demo"
 
 val apiConfigurationsMap: Map<String, ApiConfiguration> = mapOf(
+    STAGING_LS to ApiConfiguration(
+        branchKey = "key_live_nFc30jPoTV53LhvHat5XXffntufA4O0l",
+        apiUrl = "https://api.stage.branch.io/",
+        appId = "1425582272655938028",
+        staging = true
+    ),
     STAGING_AC to ApiConfiguration(
         branchKey = "key_live_juoZrlpzQZvBQbwR33GO5hicszlTGnVT",
         apiUrl = "https://protected-api.stage.branch.io/",
@@ -25,6 +33,12 @@ val apiConfigurationsMap: Map<String, ApiConfiguration> = mapOf(
         appId = "436637608899006753",
         staging = true
     ),
+    PRODUCTION_LS to ApiConfiguration(
+        branchKey = "key_live_hsdXYiNiH9pfDv50xrFt0gbgEEiMIqFO",
+        apiUrl = "https://api2.branch.io/",
+        appId = "1425583205569811094",
+        staging = false
+    ),
     PRODUCTION_AC to ApiConfiguration(
         branchKey = "key_live_hshD4wiPK2sSxfkZqkH30ggmyBfmGmD7",
         apiUrl = "https://protected-api.branch.io/",
@@ -32,9 +46,9 @@ val apiConfigurationsMap: Map<String, ApiConfiguration> = mapOf(
         staging = false
     ),
     PRODUCTION to ApiConfiguration(
-        branchKey = "key_live_iDiV7ZewvDm9GIYxUnwdFdmmvrc9m3Aw",
+        branchKey = "key_live_iCh53eMdH5aIibeOqRYBojgpyrmU4gd8",
         apiUrl = "https://api2.branch.io/",
-        appId = "1364964166783226677",
+        appId = "1425585005551178435",
         staging = false
     )
 )

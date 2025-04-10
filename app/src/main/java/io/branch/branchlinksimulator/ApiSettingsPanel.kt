@@ -59,6 +59,18 @@ fun ApiSettingsPanel(navController: NavController) {
                     saveConfig(preferences, it)
                 })
             }
+
+            Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                ApiButton(configName = STAGING_LS, selectedConfig = selectedConfig, Modifier.weight(1f), onSelect = {
+                    selectedConfig = it
+                    saveConfig(preferences, it)
+                })
+                ApiButton(configName = PRODUCTION_LS, selectedConfig = selectedConfig, Modifier.weight(1f), onSelect = {
+                    selectedConfig = it
+                    saveConfig(preferences, it)
+                })
+            }
+
             RoundedButton(title = "See Requests", icon = R.drawable.branch_badge_all_white) {
                 navController.navigate("request")
             }
