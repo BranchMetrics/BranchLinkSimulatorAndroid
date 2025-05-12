@@ -11,11 +11,11 @@ const val STAGING = "[Stage] External Services"
 const val PRODUCTION = "Pro Production"
 const val STAGING_AC = "[Stage] Adv. Compliance Sandbox"
 const val PRODUCTION_AC = "Adv. Compliance Sandbox"
-const val STAGING_LS = "[Stage] LS + ENGMT Ess. Demo"
-const val PRODUCTION_LS = "LS + ENGMT Ess. Demo"
+const val STAGING_ACTIVATION = "[Stage] Activation Demo"
+const val PRODUCTION_ACTIVATION = "Activation Demo"
 
 val apiConfigurationsMap: Map<String, ApiConfiguration> = mapOf(
-    STAGING_LS to ApiConfiguration(
+    STAGING_ACTIVATION to ApiConfiguration(
         branchKey = "key_live_nFc30jPoTV53LhvHat5XXffntufA4O0l",
         apiUrl = "https://api.stage.branch.io/",
         appId = "1425582272655938028",
@@ -33,7 +33,7 @@ val apiConfigurationsMap: Map<String, ApiConfiguration> = mapOf(
         appId = "436637608899006753",
         staging = true
     ),
-    PRODUCTION_LS to ApiConfiguration(
+    PRODUCTION_ACTIVATION to ApiConfiguration(
         branchKey = "key_live_hsdXYiNiH9pfDv50xrFt0gbgEEiMIqFO",
         apiUrl = "https://api2.branch.io/",
         appId = "1425583205569811094",
