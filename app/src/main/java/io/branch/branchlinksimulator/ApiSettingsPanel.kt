@@ -61,11 +61,11 @@ fun ApiSettingsPanel(navController: NavController) {
             }
 
             Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                ApiButton(configName = STAGING_LS, selectedConfig = selectedConfig, Modifier.weight(1f), onSelect = {
+                ApiButton(configName = STAGING_ACTIVATION, selectedConfig = selectedConfig, Modifier.weight(1f), onSelect = {
                     selectedConfig = it
                     saveConfig(preferences, it)
                 })
-                ApiButton(configName = PRODUCTION_LS, selectedConfig = selectedConfig, Modifier.weight(1f), onSelect = {
+                ApiButton(configName = PRODUCTION_ACTIVATION, selectedConfig = selectedConfig, Modifier.weight(1f), onSelect = {
                     selectedConfig = it
                     saveConfig(preferences, it)
                 })
