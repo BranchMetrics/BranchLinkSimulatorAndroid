@@ -70,6 +70,7 @@ class RoundTripStore(context: Context) : IBranchLoggingCallbacks {
 
     private suspend fun processLog(log: String?) {
         if (log == null) return
+        println(log)
         when {
             log.contains("posting to") -> {
                 addRoundTrip(parseUrl(log) ?: FAILED)
@@ -82,7 +83,6 @@ class RoundTripStore(context: Context) : IBranchLoggingCallbacks {
                 val response = parseResponseLog(log)
                 addResponse(response)
             }
-            else -> println(log)
         }
     }
 

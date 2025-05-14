@@ -6,14 +6,14 @@ plugins {
 
 android {
     namespace = "io.branch.branchlinksimulator"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "io.branch.branchlinksimulator"
         minSdk = 26
-        targetSdk = 34
-        versionCode = 24
-        versionName = "2.4"
+        targetSdk = 35
+        versionCode = 25
+        versionName = "2.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -70,8 +70,9 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
-    implementation("io.branch.sdk.android:library:5.14.0")
+    implementation("io.branch.sdk.android:library:5.18.0")
     implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
     implementation("com.android.installreferrer:installreferrer:2.2")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    implementation("androidx.browser:browser:1.8.0")
 }
