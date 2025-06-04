@@ -61,6 +61,14 @@ android {
     }
 }
 
+repositories {
+    flatDir {
+        dirs("libs") // This tells Gradle to look for AARs in the 'libs' directory
+    }
+    google()
+    mavenCentral()
+}
+
 dependencies {
 
     implementation("androidx.core:core-ktx:1.10.1")
@@ -72,6 +80,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.7")
+    implementation(files("libs/branch-sdk-debug.aar"))
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -81,7 +90,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
-    implementation("io.branch.sdk.android:library:5.18.1")
+    //implementation("io.branch.sdk.android:library:5.18.1")
+
     implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
     implementation("com.android.installreferrer:installreferrer:2.2")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
