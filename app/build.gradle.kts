@@ -61,14 +61,6 @@ android {
     }
 }
 
-repositories {
-    flatDir {
-        dirs("libs") // This tells Gradle to look for AARs in the 'libs' directory
-    }
-    google()
-    mavenCentral()
-}
-
 dependencies {
 
     implementation("androidx.core:core-ktx:1.10.1")

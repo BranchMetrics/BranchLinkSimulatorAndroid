@@ -8,6 +8,9 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        flatDir {
+            dirs("libs") // This tells Gradle to look for AARs in the 'libs' directory
+        }
         google()
         mavenCentral()
     }
