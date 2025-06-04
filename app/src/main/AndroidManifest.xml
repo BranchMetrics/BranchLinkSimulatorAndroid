@@ -42,7 +42,6 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" android:host="prod-freedom.branchcustom.xyz" />
                 <data android:scheme="https" android:host="prod-freedom.app.link" />
-                <data android:scheme="https" android:host="prod-freedom-alternate.app.link" />
             </intent-filter>
 
             <!-- Test Prod App -->
@@ -51,7 +50,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" android:host="prod-freedom.test-app.link" />
-                <data android:scheme="https" android:host="prod-freedom-alternate.test-app.link" />
             </intent-filter>
 
             <!-- Live Prod Link Shortener App -->
@@ -61,7 +59,6 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" android:host="hop.link" />
                 <data android:scheme="https" android:host="r3dfg.app.link" />
-                <data android:scheme="https" android:host="r3dfg-alternate.app.link" />
             </intent-filter>
 
             <!-- Live Prod AC App -->
@@ -70,7 +67,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" android:host="prod-ac-sandbox.app.link" />
-                <data android:scheme="https" android:host="prod-ac-sandbox-alternate.app.link" />
             </intent-filter>
 
             <!-- Test Prod AC App -->
@@ -79,7 +75,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" android:host="prod-ac-sandbox.test-app.link" />
-                <data android:scheme="https" android:host="prod-ac-sandbox-alternate.test-app.link" />
             </intent-filter>
 
             <!-- Live Stage App -->
@@ -89,7 +84,6 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" android:host="stage-freedom.branchcustom.xyz" />
                 <data android:scheme="https" android:host="stage-freedom.branchbeta.link" />
-                <data android:scheme="https" android:host="stage-freedom-alternate.branchbeta.link" />
             </intent-filter>
 
             <!-- Test Stage App -->
@@ -98,7 +92,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" android:host="stage-freedom.test-branchbeta.link" />
-                <data android:scheme="https" android:host="stage-freedom-alternate.test-branchbeta.link" />
             </intent-filter>
 
             <!-- Live Stage Link Shortener App -->
@@ -108,7 +101,6 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" android:host="hoplink.branchcustom.xyz" />
                 <data android:scheme="https" android:host="skhsg.branchbeta.link" />
-                <data android:scheme="https" android:host="skhsg-alternate.branchbeta.link" />
             </intent-filter>
 
             <!-- Live Stage AC App -->
@@ -117,7 +109,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" android:host="stage-ac-sandbox.branchbeta.link" />
-                <data android:scheme="https" android:host="stage-ac-sandbox-alternate.branchbeta.link" />
             </intent-filter>
 
             <!-- Test Stage AC App -->
@@ -126,7 +117,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" android:host="stage-ac-sandbox.test-branchbeta.link" />
-                <data android:scheme="https" android:host="stage-ac-sandbox-alternate.test-branchbeta.link" />
             </intent-filter>
         </activity>
         <!-- Branch init -->

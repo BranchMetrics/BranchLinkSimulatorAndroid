@@ -12,8 +12,19 @@ android {
         applicationId = "io.branch.branchlinksimulator"
         minSdk = 26
         targetSdk = 35
-        versionCode = 25
-        versionName = "2.5"
+
+        // Access the project property passed from the CI/CD pipeline
+        // Use findProperty() for safe access, returns null if property is not found
+        val versionNameFromCi = project.findProperty("versionNameFromCi") as String?
+
+        // Define a fallback version for local development or if CI property is missing
+        val defaultVersionName = "0.0.0-DEV"
+        val actualVersionName = versionNameFromCi ?: defaultVersionName
+
+        versionName = actualVersionName
+
+        // Logic to derive versionCode from actualVersionName
+        versionCode = actualVersionName.getVersionCode()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -70,9 +81,27 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
-    implementation("io.branch.sdk.android:library:5.18.0")
+    implementation("io.branch.sdk.android:library:5.18.1")
     implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
     implementation("com.android.installreferrer:installreferrer:2.2")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
     implementation("androidx.browser:browser:1.8.0")
+}
+
+// Extension function to calculate versionCode from a version string
+fun String.getVersionCode(): Int {
+    // Remove any pre-release or build metadata (e.g., "-DEV", "+build123")
+    val cleanedVersion = this.split("-", "+")[0]
+
+    val parts = cleanedVersion.split(".").map { it.toIntOrNull() ?: 0 } // Convert to Int, default to 0 if not a number
+
+    // Ensure we have at least major, minor, patch
+    val major = parts.getOrElse(0) { 0 }
+    val minor = parts.getOrElse(1) { 0 }
+    val patch = parts.getOrElse(2) { 0 }
+
+    // You can adjust these multipliers based on your versioning scheme and expected ranges
+    // Example: MAJOR * 1000000 + MINOR * 1000 + PATCH
+    // This allows for MINOR and PATCH up to 999
+    return major * 1_000_000 + minor * 1_000 + patch
 }
