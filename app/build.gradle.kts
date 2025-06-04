@@ -18,7 +18,7 @@ android {
         val versionNameFromCi = project.findProperty("versionNameFromCi") as String?
 
         // Define a fallback version for local development or if CI property is missing
-        val defaultVersionName = "0.0.0-DEV"
+        val defaultVersionName = "0.0.1-DEV"
         val actualVersionName = versionNameFromCi ?: defaultVersionName
 
         versionName = actualVersionName
@@ -72,7 +72,6 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.7")
-    implementation(files("libs/branch-sdk-debug.aar"))
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -81,8 +80,13 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation ("com.android.support.constraint:constraint-layout:1.1.3")
+
 
     //implementation("io.branch.sdk.android:library:5.18.1")
+    // This branch assumes CI will place aar here
+    implementation(files("libs/branch-sdk-debug.aar"))
+
 
     implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
     implementation("com.android.installreferrer:installreferrer:2.2")
