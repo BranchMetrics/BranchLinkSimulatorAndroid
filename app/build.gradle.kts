@@ -70,7 +70,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
-    implementation("io.branch.sdk.android:library:5.18.0")
+    implementation(files("libs/Branch-SDK-release.aar"))
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
     implementation("com.android.installreferrer:installreferrer:2.2")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")

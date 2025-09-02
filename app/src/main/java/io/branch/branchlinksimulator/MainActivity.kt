@@ -574,13 +574,7 @@ fun convertBUOToQueryString(buo: BranchUniversalObject): String {
         keyValuePairs.add("expiration=${expiration}")
     }
 
-    buo.isLocallyIndexable.let { locallyIndex ->
-        keyValuePairs.add("locallyIndex=${locallyIndex}")
-    }
-
-    buo.isPublicallyIndexable.let { publiclyIndex ->
-        keyValuePairs.add("publiclyIndex=${publiclyIndex}")
-    }
+    // Note: isLocallyIndexable and isPublicallyIndexable have been deprecated/removed from Branch SDK
 
     buo.contentMetadata.customMetadata.filterNot { it.key.isBlank() || it.value.toString().isBlank() }.forEach { (key, value) ->
         keyValuePairs.add("${URLEncoder.encode(key, "UTF-8")}=${URLEncoder.encode(value.toString(), "UTF-8")}")

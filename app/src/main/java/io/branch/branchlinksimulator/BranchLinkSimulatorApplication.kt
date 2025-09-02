@@ -21,7 +21,7 @@ class BranchLinkSimulatorApplication: Application() {
         roundTripStore = RoundTripStore(this)
         Branch.enableLogging(roundTripStore)
         // Branch object initialization
-        Branch.getAutoInstance(this, currentConfig.branchKey)
+        Branch.getAutoInstance(this)
 
         // Retrieve or create the bls_session_id
         val sharedPreferences = getSharedPreferences("branch_session_prefs", Context.MODE_PRIVATE)
