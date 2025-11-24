@@ -2,13 +2,25 @@ package io.branch.branchlinksimulator
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import io.branch.referral.Branch
+import kotlinx.coroutines.CompletableDeferred
 import java.util.UUID
+
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class BranchLinkSimulatorApplication: Application() {
     lateinit var currentConfig: ApiConfiguration
     lateinit var roundTripStore: RoundTripStore
         private set
+
+    private val applicationJob = SupervisorJob()
+    val applicationScope = CoroutineScope(Dispatchers.Main + applicationJob)
+    val branchInitializationSignal = CompletableDeferred<Unit>()
 
     override fun onCreate() {
         super.onCreate()
@@ -21,7 +33,7 @@ class BranchLinkSimulatorApplication: Application() {
         roundTripStore = RoundTripStore(this)
         Branch.enableLogging(roundTripStore)
         // Branch object initialization
-        Branch.getAutoInstance(this, currentConfig.branchKey)
+        // Branch.getAutoInstance(this, currentConfig.branchKey)
 
         // Retrieve or create the bls_session_id
         val sharedPreferences = getSharedPreferences("branch_session_prefs", Context.MODE_PRIVATE)
@@ -30,8 +42,28 @@ class BranchLinkSimulatorApplication: Application() {
             sharedPreferences.edit().putString("bls_session_id", newId).apply()
             newId
         }
+        Log.d("AppScopeTest", "Application Fired launching coroutine")
+        applicationScope.launch {
+            Log.e("AppScopeTest", "Coroutine Successfully fired")
+            setupBranchInstance(this@BranchLinkSimulatorApplication, currentConfig.branchKey)
 
-        // Set the bls_session_id in Branch request metadata
-        Branch.getInstance().setRequestMetadata("bls_session_id", blsSessionId)
+            withContext(Dispatchers.Main) {
+
+                // Set the bls_session_id in Branch request metadata
+                Branch.getInstance().setRequestMetadata("bls_session_id", blsSessionId)
+            }
+        }
+    }
+
+    override fun onTerminate() {
+        super.onTerminate()
+        applicationJob.cancel()
+    }
+
+    suspend fun setupBranchInstance(context: Context, branchKey: String) {
+        withContext(Dispatchers.IO) {
+            Branch.getAutoInstance(context, branchKey)
+        }
+        branchInitializationSignal.complete(Unit)
     }
 }

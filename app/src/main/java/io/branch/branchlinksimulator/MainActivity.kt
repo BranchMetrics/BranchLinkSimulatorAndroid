@@ -120,6 +120,8 @@ class MainActivity : ComponentActivity() {
         }
 
         lifecycleScope.launch {
+            val app = application as BranchLinkSimulatorApplication
+            app.branchInitializationSignal.await()
             val initErrorMessage = initializeBranch()
             initErrorMessageState.value = initErrorMessage
         }
