@@ -32,8 +32,6 @@ class BranchLinkSimulatorApplication: Application() {
 
         roundTripStore = RoundTripStore(this)
         Branch.enableLogging(roundTripStore)
-        // Branch object initialization
-        // Branch.getAutoInstance(this, currentConfig.branchKey)
 
         // Retrieve or create the bls_session_id
         val sharedPreferences = getSharedPreferences("branch_session_prefs", Context.MODE_PRIVATE)
@@ -42,13 +40,10 @@ class BranchLinkSimulatorApplication: Application() {
             sharedPreferences.edit().putString("bls_session_id", newId).apply()
             newId
         }
-        Log.d("AppScopeTest", "Application Fired launching coroutine")
         applicationScope.launch {
-            Log.e("AppScopeTest", "Coroutine Successfully fired")
+            // Coroutine used to move creating the Branch singleton through Branch.getAutoInstance() to background thread
             setupBranchInstance(this@BranchLinkSimulatorApplication, currentConfig.branchKey)
-
             withContext(Dispatchers.Main) {
-
                 // Set the bls_session_id in Branch request metadata
                 Branch.getInstance().setRequestMetadata("bls_session_id", blsSessionId)
             }
@@ -62,6 +57,7 @@ class BranchLinkSimulatorApplication: Application() {
 
     suspend fun setupBranchInstance(context: Context, branchKey: String) {
         withContext(Dispatchers.IO) {
+            // Branch object initialization
             Branch.getAutoInstance(context, branchKey)
         }
         branchInitializationSignal.complete(Unit)
