@@ -83,9 +83,9 @@ dependencies {
     implementation ("com.android.support.constraint:constraint-layout:1.1.3")
 
 
-    //implementation("io.branch.sdk.android:library:5.18.1")
+    implementation("io.branch.sdk.android:library:5.20.3")
     // This branch assumes CI will place aar here
-    implementation(files("libs/branch-sdk-debug.aar"))
+    //implementation(files("libs/branch-sdk-debug.aar"))
 
 
     implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
