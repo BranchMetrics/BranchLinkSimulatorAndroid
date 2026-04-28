@@ -472,9 +472,9 @@ fun DetailScreen(title: String, deepLinkParams: Map<String, String>) {
             RoundedButton(title = "Copy Branch Link", icon = R.drawable.content_copy) {
                 // Create Link and copy to clipboard
                 val canonicalId = when (title.lowercase()) {
-                    "tree" -> "item/tree"
-                    "twig" -> "item/twig"
-                    "leaf" -> "item/leaf"
+                    "tree" -> "item/Tree"
+                    "twig" -> "item/Twig"
+                    "leaf" -> "item/Leaf"
                     else -> "item/default"
                 }
                 val buo = BranchUniversalObject()
