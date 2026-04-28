@@ -143,7 +143,16 @@ class MainActivity : ComponentActivity() {
                 return@withCallback
             }
 
-            val title = branchUniversalObject.title ?: "Default Title"
+            val canonicalId = branchUniversalObject.canonicalIdentifier ?: ""
+            val destination = when (canonicalId.lowercase()) {
+                "item/tree" -> "Tree"
+                "item/twig" -> "Twig"
+                "item/leaf" -> "Leaf"
+                else -> {
+                    Log.w("BranchSDK_Tester", "Unknown canonical_identifier: $canonicalId")
+                    "Default Title"
+                }
+            }
 
             val lpQueryString = convertLinkPropertiesToQueryString(linkProperties)
             val buoQueryString = convertBUOToQueryString(branchUniversalObject)
@@ -152,8 +161,8 @@ class MainActivity : ComponentActivity() {
                 .filterNot { it.isEmpty() }
                 .joinToString("&")
 
-            Log.i("BranchSDK_Tester", "Navigating to details/$title/$combinedQueryString")
-            navController?.navigate("details/$title/$combinedQueryString")
+            Log.i("BranchSDK_Tester", "Navigating to details/$destination/$combinedQueryString (canonical_identifier: $canonicalId)")
+            navController?.navigate("details/$destination/$combinedQueryString")
             continuation.resume(null)
         }.withData(this.intent.data).init()
     }
@@ -462,7 +471,15 @@ fun DetailScreen(title: String, deepLinkParams: Map<String, String>) {
 
             RoundedButton(title = "Copy Branch Link", icon = R.drawable.content_copy) {
                 // Create Link and copy to clipboard
-                val buo = BranchUniversalObject().setTitle(title)
+                val canonicalId = when (title.lowercase()) {
+                    "tree" -> "item/tree"
+                    "twig" -> "item/twig"
+                    "leaf" -> "item/leaf"
+                    else -> "item/default"
+                }
+                val buo = BranchUniversalObject()
+                    .setCanonicalIdentifier(canonicalId)
+                    .setTitle(title)
                 val lp = LinkProperties()
                     .setFeature("Copy Link Button")
                 val url = buo.getShortUrl(context, lp)
