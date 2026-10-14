@@ -38,38 +38,10 @@ fun ApiSettingsPanel(navController: NavController) {
         ApiInfoRow(label = "App ID", value = selectedConfig.appId)
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                ApiButton(configName = STAGING, selectedConfig = selectedConfig, Modifier.weight(1f), onSelect = {
-                    selectedConfig = it
-                    saveConfig(preferences, it)
-                })
-                ApiButton(configName = PRODUCTION, selectedConfig = selectedConfig, Modifier.weight(1f), onSelect = {
-                    selectedConfig = it
-                    saveConfig(preferences, it)
-                })
-            }
-
-            Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                ApiButton(configName = STAGING_AC, selectedConfig = selectedConfig, Modifier.weight(1f), onSelect = {
-                    selectedConfig = it
-                    saveConfig(preferences, it)
-                })
-                ApiButton(configName = PRODUCTION_AC, selectedConfig = selectedConfig, Modifier.weight(1f), onSelect = {
-                    selectedConfig = it
-                    saveConfig(preferences, it)
-                })
-            }
-
-            Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                ApiButton(configName = STAGING_ACTIVATION, selectedConfig = selectedConfig, Modifier.weight(1f), onSelect = {
-                    selectedConfig = it
-                    saveConfig(preferences, it)
-                })
-                ApiButton(configName = PRODUCTION_ACTIVATION, selectedConfig = selectedConfig, Modifier.weight(1f), onSelect = {
-                    selectedConfig = it
-                    saveConfig(preferences, it)
-                })
-            }
+            ApiConfigDropdown(selectedConfig = selectedConfig, onSelect = {
+                selectedConfig = it
+                saveConfig(preferences, it)
+            })
 
             RoundedButton(title = "See Requests", icon = R.drawable.branch_badge_all_white) {
                 navController.navigate("request")
@@ -113,36 +85,43 @@ fun ApiInfoRow(label: String, value: String) {
 
 
 @Composable
-fun ApiButton(
-    configName: String,
+fun ApiConfigDropdown(
     selectedConfig: ApiConfiguration,
     modifier: Modifier = Modifier,
     onSelect: (ApiConfiguration) -> Unit
 ) {
-    val config = apiConfigurationsMap[configName]
-    val isSelected = selectedConfig == config
+    val selectedName = apiConfigurationsMap.entries.firstOrNull { it.value == selectedConfig }?.key ?: "Select config"
 
+    var expanded by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
 
-    Button(
-        onClick = {
-            if (config != null) {
-                onSelect(config)
-                showDialog = true
+    Box(modifier = modifier.fillMaxWidth()) {
+        Button(
+            onClick = { expanded = true },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "API Config: $selectedName",
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center
+            )
+        }
+
+        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            apiConfigurationsMap.keys.sorted().forEach { configName ->
+                DropdownMenuItem(
+                    text = { Text(configName) },
+                    onClick = {
+                        expanded = false
+                        apiConfigurationsMap[configName]?.let {
+                            onSelect(it)
+                            showDialog = true
+                        }
+                    }
+                )
             }
-        },
-        modifier = modifier.padding(0.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Gray,
-            contentColor = Color.White
-        )
-    ) {
-        Text(
-            text = configName,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.Center
-        )
+        }
     }
 
     if (showDialog) {
