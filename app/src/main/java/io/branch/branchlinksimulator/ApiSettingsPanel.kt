@@ -106,7 +106,7 @@ fun ApiConfigDropdown(
             contentPadding = PaddingValues(vertical = 12.dp)
         ) {
             Text(
-                text = "$selectedName ▾",
+                text = "App: $selectedName ▾",
                 fontSize = 18.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
