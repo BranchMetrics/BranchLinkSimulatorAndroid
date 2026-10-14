@@ -14,9 +14,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlin.system.exitProcess
 
@@ -98,17 +98,26 @@ fun ApiConfigDropdown(
     Box(modifier = modifier.fillMaxWidth()) {
         Button(
             onClick = { expanded = true },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 4.dp),
+            shape = MaterialTheme.shapes.medium,
+            elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
+            contentPadding = PaddingValues(vertical = 12.dp)
         ) {
             Text(
-                text = "API Config: $selectedName",
+                text = "$selectedName ▾",
+                fontSize = 18.sp,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                textAlign = TextAlign.Center
+                overflow = TextOverflow.Ellipsis
             )
         }
 
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.fillMaxWidth(0.9f)
+        ) {
             apiConfigurationsMap.keys.sorted().forEach { configName ->
                 DropdownMenuItem(
                     text = { Text(configName) },
