@@ -45,6 +45,17 @@
                 <data android:scheme="https" android:host="prod-freedom-alternate.app.link" />
             </intent-filter>
 
+            <!-- No OS Deeplinking App (prod + stage): alternate domains only. The main domains are intentionally
+                 left out so tapping a main-domain link never opens the app; only the deepview CTA, which goes
+                 to the alternate domain, can. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="no-os-alternate.app.link" />
+                <data android:scheme="https" android:host="cy19n-alternate.branchbeta.link" />
+            </intent-filter>
+
             <!-- Test Prod App -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
