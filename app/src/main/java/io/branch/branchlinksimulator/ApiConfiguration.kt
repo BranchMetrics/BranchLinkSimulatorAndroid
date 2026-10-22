@@ -13,8 +13,22 @@ const val STAGING_AC = "[Stage] Adv. Compliance Sandbox"
 const val PRODUCTION_AC = "Adv. Compliance Sandbox"
 const val STAGING_ACTIVATION = "[Stage] Activation Demo"
 const val PRODUCTION_ACTIVATION = "Activation Demo"
+const val STAGING_NO_OS_DEEPLINKING = "[Stage] No OS Deeplinking"
+const val PRODUCTION_NO_OS_DEEPLINKING = "No OS Deeplinking"
 
 val apiConfigurationsMap: Map<String, ApiConfiguration> = mapOf(
+    STAGING_NO_OS_DEEPLINKING to ApiConfiguration(
+        branchKey = "key_live_ozDLMYWB0yxXOmMFPFMGDbbkqseV3c1Q",
+        apiUrl = "https://api.stage.branch.io/",
+        appId = "1638702825431126734",
+        staging = true
+    ),
+    PRODUCTION_NO_OS_DEEPLINKING to ApiConfiguration(
+        branchKey = "key_live_kttML9YtXgiSHaDVwIhNQajeDrkMBiDJ",
+        apiUrl = "https://api2.branch.io/",
+        appId = "1638679721866711622",
+        staging = false
+    ),
     STAGING_ACTIVATION to ApiConfiguration(
         branchKey = "key_live_nFc30jPoTV53LhvHat5XXffntufA4O0l",
         apiUrl = "https://api.stage.branch.io/",
