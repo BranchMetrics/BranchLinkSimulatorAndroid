@@ -1,31 +1,27 @@
 {
   description = "BranchLinkSimulatorAndroid flake";
+
   inputs = {
-    branch-nix.url = "git+ssh://git@github.com/BranchMetrics/nix";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, branch-nix }:
-    let
-      nixpkgs = branch-nix.nixpkgs;
-      extra-pkgs = branch-nix.packages;
-      utils = branch-nix.utils;
-      system-utils = branch-nix.system-utils;
-    in
+  outputs = { self, nixpkgs, utils }:
     utils.lib.eachDefaultSystem (system:
       let
-        pkgs = nixpkgs.legacyPackages.${system} // {
-          extra-pkgs = extra-pkgs.${system};
-        };
+        pkgs = nixpkgs.legacyPackages.${system};
         jdk = pkgs.openjdk21;
       in
       {
-        devShell = pkgs.mkShell {
-          nativeBuildInputs = [
+        devShells.default = pkgs.mkShell {
+          packages = [
             jdk
           ];
+
           JAVA_HOME = "${jdk}";
         };
-        formatter = pkgs.nixpkgs-fmt;
+
+        formatter = pkgs.nixfmt-rfc-style;
       }
     );
 }
